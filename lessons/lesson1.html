@@ -8,164 +8,98 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --pink:      #e8185a;
-    --pink-dk:   #c01248;
-    --bg:        #fdf0f5;
-    --dark:      #111827;
-    --code-bg:   #0f172a;
-    --out-bg:    #0a0f1a;
-    --green:     #4ade80;
-    --border:    #f0a0c0;
-    --pill-bg:   #d1fae5;
-    --pill-fg:   #065f46;
-    --radius:    8px;
-    --mono:      'Courier New', Courier, monospace;
-    --ui:        system-ui, -apple-system, sans-serif;
+    --pink:    #e8185a;
+    --pink-dk: #c01248;
+    --bg:      #fdf0f5;
+    --dark:    #111827;
+    --code-bg: #0f172a;
+    --out-bg:  #0a0f1a;
+    --green:   #4ade80;
+    --border:  #f0a0c0;
+    --pill-bg: #d1fae5;
+    --pill-fg: #065f46;
+    --radius:  8px;
+    --mono:    'Courier New', Courier, monospace;
+    --ui:      system-ui, -apple-system, sans-serif;
   }
 
-  body {
-    font-family: var(--ui);
-    background: #f3f4f6;
-    padding: 8px;
-    font-size: 13px;
-  }
+  body { font-family: var(--ui); background: #f3f4f6; padding: 8px; font-size: 13px; }
 
   .widget {
-    background: #fff;
-    border-radius: var(--radius);
-    overflow: hidden;
-    border: 1px solid #e5e7eb;
-    max-width: 900px;
-    margin: 0 auto;
+    background: #fff; border-radius: var(--radius);
+    overflow: hidden; border: 1px solid #e5e7eb;
+    max-width: 900px; margin: 0 auto;
     box-shadow: 0 2px 8px rgba(0,0,0,.08);
   }
 
-  /* ── Header ── */
-  .hdr {
-    background: var(--pink);
-    padding: 7px 12px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .hdr-course {
-    font-size: 10px; font-weight: 700;
-    letter-spacing: .12em; color: rgba(255,255,255,.75);
-    text-transform: uppercase;
-  }
-  .hdr-title { font-size: 15px; font-weight: 700; color: #fff; margin-top: 1px; }
-  .status-pill {
-    font-size: 11px; font-weight: 600;
-    padding: 3px 10px; border-radius: 20px;
-    background: var(--pill-bg); color: var(--pill-fg);
-    white-space: nowrap; transition: background .3s, color .3s;
-  }
+  /* Header */
+  .hdr { background: var(--pink); padding: 7px 12px; display: flex; align-items: center; justify-content: space-between; }
+  .hdr-course { font-size: 10px; font-weight: 700; letter-spacing: .12em; color: rgba(255,255,255,.75); text-transform: uppercase; }
+  .hdr-title  { font-size: 15px; font-weight: 700; color: #fff; margin-top: 1px; }
+  .status-pill { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: var(--pill-bg); color: var(--pill-fg); white-space: nowrap; transition: background .3s, color .3s; }
   .status-pill.loading { background: #fef9c3; color: #713f12; }
   .status-pill.error   { background: #fee2e2; color: #7f1d1d; }
 
-  /* ── Task bar ── */
-  .task-bar {
-    background: var(--dark); color: #e5e7eb;
-    padding: 6px 12px; font-size: 12px; line-height: 1.4;
-  }
+  /* Task bar */
+  .task-bar { background: var(--dark); color: #e5e7eb; padding: 6px 12px; font-size: 12px; line-height: 1.4; }
   .task-bar strong { color: #fff; }
-  .task-bar code {
-    font-family: var(--mono);
-    background: rgba(255,255,255,.12);
-    padding: 1px 4px; border-radius: 3px; font-size: 11px;
-  }
+  .task-bar code { font-family: var(--mono); background: rgba(255,255,255,.12); padding: 1px 4px; border-radius: 3px; font-size: 11px; }
 
-  /* ── Editor + Output row ── */
-  .editor-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    background: var(--bg);
-    padding: 8px;
-  }
-  .pane-label {
-    font-size: 11px; font-weight: 700;
-    color: #374151; margin-bottom: 4px;
-    text-transform: uppercase; letter-spacing: .06em;
-  }
+  /* Editor + Output */
+  .editor-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: var(--bg); padding: 8px; }
+  .pane-label { font-size: 11px; font-weight: 700; color: #374151; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .06em; }
 
   #code-editor {
-    width: 100%;
-    background: var(--code-bg); color: #e2e8f0;
+    width: 100%; background: var(--code-bg); color: #e2e8f0;
     font-family: var(--mono); font-size: 12px; line-height: 1.55;
-    border: none; border-radius: 6px;
-    padding: 8px 10px; resize: vertical;
-    min-height: 100px; outline: none;
+    border: none; border-radius: 6px; padding: 8px 10px;
+    resize: vertical; min-height: 100px; outline: none;
     caret-color: var(--pink); tab-size: 4;
   }
   #code-editor:focus { box-shadow: 0 0 0 2px var(--pink); }
 
-  /* ── Terminal pane ── */
+  /* Terminal */
   .terminal-wrap {
-    background: var(--out-bg);
-    border-radius: 6px;
+    background: var(--out-bg); border-radius: 6px;
     display: flex; flex-direction: column;
     min-height: 100px; max-height: 240px;
-    overflow: hidden;
-    cursor: text;
+    overflow: hidden; cursor: text;
   }
-  /* macOS-style titlebar */
-  .term-bar {
-    background: #1a2035;
-    padding: 5px 8px 4px;
-    display: flex; gap: 5px; align-items: center;
-    flex-shrink: 0;
-  }
-  .term-bar span { width: 9px; height: 9px; border-radius: 50%; }
-  .tb-r { background: #ff5f57; }
-  .tb-y { background: #ffbd2e; }
-  .tb-g { background: #28c840; }
+  .term-bar { background: #1a2035; padding: 5px 8px 4px; display: flex; gap: 5px; align-items: center; flex-shrink: 0; }
+  .term-bar span { width: 9px; height: 9px; border-radius: 50%; display: block; }
+  .tb-r { background: #ff5f57; } .tb-y { background: #ffbd2e; } .tb-g { background: #28c840; }
 
-  /* Scrollable output history */
+  /* The output area uses inline layout so the input field sits on the same line as the prompt */
   #output {
-    flex: 1;
-    color: var(--green);
+    flex: 1; overflow-y: auto;
+    padding: 6px 10px;
     font-family: var(--mono); font-size: 12px; line-height: 1.6;
-    padding: 6px 10px 2px;
-    white-space: pre-wrap; word-break: break-word;
-    overflow-y: auto;
-  }
-  #output .err  { color: #f87171; }
-  #output .sys  { color: #64748b; font-style: italic; }
-  #output .inp  { color: #e2e8f0; } /* user-typed text echo */
-
-  /* Inline input line — lives inside the terminal */
-  .term-input-line {
-    display: none;
-    align-items: baseline;
-    padding: 0 10px 6px;
-    gap: 0;
-    flex-shrink: 0;
-  }
-  .term-input-line.active { display: flex; }
-  #term-prompt {
     color: var(--green);
-    font-family: var(--mono); font-size: 12px;
-    white-space: pre; flex-shrink: 0;
+    /* inline-block children flow like text, keeping prompt + input on one line */
+    word-break: break-word;
   }
-  #term-field {
-    flex: 1; min-width: 4ch;
-    background: transparent; border: none; outline: none;
-    color: #fff;
-    font-family: var(--mono); font-size: 12px;
-    caret-color: #fff;
-    padding: 0;
-  }
+  /* Each printed chunk is inline so text flows continuously */
+  #output .chunk     { white-space: pre-wrap; display: inline; }
+  #output .chunk.err { color: #f87171; }
+  #output .chunk.sys { color: #64748b; font-style: italic; }
+  #output .chunk.inp { color: #e2e8f0; }  /* user-typed echo */
 
-  /* ── Buttons ── */
-  .controls {
-    display: flex; gap: 6px;
-    padding: 0 8px 8px; background: var(--bg);
-    flex-wrap: wrap; align-items: center;
+  /* The input field sits inline — no block break before it */
+  #term-field {
+    display: none;
+    background: transparent; border: none; outline: none;
+    color: #fff; caret-color: #fff;
+    font-family: var(--mono); font-size: 12px; line-height: 1.6;
+    /* width grows with content */
+    width: 20ch; max-width: 100%;
+    vertical-align: baseline;
+    padding: 0; margin: 0;
   }
-  .btn {
-    padding: 5px 16px; border: none; border-radius: 5px;
-    font-size: 12px; font-weight: 700; cursor: pointer;
-    transition: background .15s, transform .08s;
-  }
+  #term-field.active { display: inline; }
+
+  /* Buttons */
+  .controls { display: flex; gap: 6px; padding: 0 8px 8px; background: var(--bg); flex-wrap: wrap; align-items: center; }
+  .btn { padding: 5px 16px; border: none; border-radius: 5px; font-size: 12px; font-weight: 700; cursor: pointer; transition: background .15s, transform .08s; }
   .btn:active { transform: scale(.96); }
   .btn-pink { background: var(--pink); color: #fff; }
   .btn-pink:hover { background: var(--pink-dk); }
@@ -173,61 +107,31 @@
   .btn-dark:hover { background: #1f2937; }
   .btn:disabled { opacity: .5; cursor: not-allowed; }
 
-  /* ── Feedback ── */
-  .feedback {
-    margin: 0 8px 8px; padding: 6px 10px;
-    border-radius: 5px; font-size: 12px;
-    border: 1.5px solid var(--border);
-    color: #374151; background: #fff; display: none;
-  }
+  /* Feedback */
+  .feedback { margin: 0 8px 8px; padding: 6px 10px; border-radius: 5px; font-size: 12px; border: 1.5px solid var(--border); color: #374151; background: #fff; display: none; }
   .feedback.visible { display: block; }
   .feedback.ok  { border-color: #6ee7b7; background: #f0fdf4; color: #065f46; }
   .feedback.bad { border-color: #fca5a5; background: #fef2f2; color: #7f1d1d; }
 
-  /* ── File tools ── */
-  details.extra {
-    margin: 0 8px 8px;
-    border: 1.5px solid var(--border);
-    border-radius: 5px; overflow: hidden;
-  }
-  details.extra summary {
-    padding: 6px 10px; font-size: 12px; font-weight: 700;
-    cursor: pointer; list-style: none;
-    color: #111; background: #fff; user-select: none;
-  }
+  /* File tools */
+  details.extra { margin: 0 8px 8px; border: 1.5px solid var(--border); border-radius: 5px; overflow: hidden; }
+  details.extra summary { padding: 6px 10px; font-size: 12px; font-weight: 700; cursor: pointer; list-style: none; color: #111; background: #fff; user-select: none; }
   details.extra summary::-webkit-details-marker { display: none; }
   details.extra summary::before { content: '▶ '; font-size: 10px; color: var(--pink); }
   details[open].extra summary::before { content: '▼ '; }
-  .extra-body {
-    padding: 10px 12px; background: var(--bg);
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-  }
+  .extra-body { padding: 10px 12px; background: var(--bg); display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .file-section h4 { font-size: 12px; font-weight: 700; color: #111; margin-bottom: 6px; }
   .file-section p  { font-size: 11px; color: #6b7280; margin-top: 4px; font-family: var(--mono); }
-  .upload-label {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--dark); color: #fff;
-    padding: 5px 12px; border-radius: 5px;
-    font-size: 11px; font-weight: 600; cursor: pointer;
-  }
+  .upload-label { display: inline-flex; align-items: center; gap: 6px; background: var(--dark); color: #fff; padding: 5px 12px; border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer; }
   .upload-label:hover { background: #1f2937; }
   #file-upload { display: none; }
   #upload-status { display: inline-block; margin-left: 6px; font-size: 11px; color: var(--pink); font-weight: 600; }
   .dl-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-  .dl-row input[type="text"] {
-    flex: 1; min-width: 100px; padding: 4px 8px;
-    border: 1.5px solid var(--border); border-radius: 5px;
-    font-size: 12px; font-family: var(--mono); outline: none;
-  }
+  .dl-row input[type="text"] { flex: 1; min-width: 100px; padding: 4px 8px; border: 1.5px solid var(--border); border-radius: 5px; font-size: 12px; font-family: var(--mono); outline: none; }
   .dl-row input[type="text"]:focus { border-color: var(--pink); }
-  .btn-sm {
-    padding: 4px 12px; border: none; border-radius: 5px;
-    font-size: 11px; font-weight: 700; cursor: pointer;
-  }
-  .btn-sm.pink { background: var(--pink); color: #fff; }
-  .btn-sm.pink:hover { background: var(--pink-dk); }
-  .btn-sm.dark { background: var(--dark); color: #fff; }
-  .btn-sm.dark:hover { background: #1f2937; }
+  .btn-sm { padding: 4px 12px; border: none; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; }
+  .btn-sm.pink { background: var(--pink); color: #fff; } .btn-sm.pink:hover { background: var(--pink-dk); }
+  .btn-sm.dark { background: var(--dark); color: #fff; } .btn-sm.dark:hover { background: #1f2937; }
   #file-list { margin-top: 6px; font-size: 11px; font-family: var(--mono); color: #374151; min-height: 16px; }
 
   @media (max-width: 560px) {
@@ -240,7 +144,6 @@
 <body>
 <div class="widget">
 
-  <!-- Header -->
   <div class="hdr">
     <div>
       <div class="hdr-course">Python Crash Course</div>
@@ -249,12 +152,10 @@
     <div class="status-pill loading" id="status-pill">Loading…</div>
   </div>
 
-  <!-- Task bar -->
   <div class="task-bar" id="task-bar">
     <strong>Task:</strong> Ask for a name using <code>input()</code>, then print a greeting.
   </div>
 
-  <!-- Code + Terminal -->
   <div class="editor-row">
     <div>
       <div class="pane-label">Your code</div>
@@ -265,31 +166,22 @@ print("Hello " + name)</textarea>
       <div class="pane-label">Output</div>
       <div class="terminal-wrap" id="terminal-wrap">
         <div class="term-bar">
-          <span class="tb-r"></span>
-          <span class="tb-y"></span>
-          <span class="tb-g"></span>
+          <span class="tb-r"></span><span class="tb-y"></span><span class="tb-g"></span>
         </div>
-        <div id="output"><span class="sys">Run your code to see output…</span></div>
-        <!-- Inline input line — appears here when input() is called -->
-        <div class="term-input-line" id="term-input-line">
-          <span id="term-prompt"></span>
-          <input type="text" id="term-field" autocomplete="off" spellcheck="false">
-        </div>
+        <!-- output is a single inline container; term-field sits inside it inline -->
+        <div id="output"><span class="chunk sys">Run your code to see output…</span><input type="text" id="term-field" autocomplete="off" spellcheck="false" aria-label="terminal input"></div>
       </div>
     </div>
   </div>
 
-  <!-- Buttons -->
   <div class="controls">
     <button class="btn btn-pink" id="btn-run"   disabled>Run</button>
     <button class="btn btn-pink" id="btn-check" disabled>Check</button>
     <button class="btn btn-dark" id="btn-reset">Reset</button>
   </div>
 
-  <!-- Feedback -->
   <div class="feedback" id="feedback"></div>
 
-  <!-- File tools -->
   <details class="extra">
     <summary>Optional text file tools</summary>
     <div class="extra-body">
@@ -317,9 +209,9 @@ print("Hello " + name)</textarea>
 
 <script src="https://cdn.jsdelivr.net/pyodide/v0.27.5/full/pyodide.js"></script>
 <script>
-// ═══════════════════════════════════════════════════════════════
-//  LESSON CONFIG  — edit only this block for each lesson
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+//  LESSON CONFIG — edit only this block for each lesson
+// ═══════════════════════════════════════════════════════
 const LESSON = {
   title:   "Lesson 1: Variables and Input",
   task:    `<strong>Task:</strong> Ask for a name using <code>input()</code>, then print a greeting.`,
@@ -331,37 +223,30 @@ const LESSON = {
     return { ok: false, msg: "✗ Output doesn't contain a greeting yet. Make sure you print 'Hello' followed by the name." };
   }
 };
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 
-// ── DOM ──────────────────────────────────────────────────────
-const pill         = document.getElementById('status-pill');
-const editor       = document.getElementById('code-editor');
-const outputEl     = document.getElementById('output');
-const feedbackEl   = document.getElementById('feedback');
-const termInputLine= document.getElementById('term-input-line');
-const termPromptEl = document.getElementById('term-prompt');
-const termField    = document.getElementById('term-field');
-const btnRun       = document.getElementById('btn-run');
-const btnCheck     = document.getElementById('btn-check');
-const btnReset     = document.getElementById('btn-reset');
-const fileUpload   = document.getElementById('file-upload');
-const uploadStatus = document.getElementById('upload-status');
-const dlFilename   = document.getElementById('dl-filename');
-const btnDownload  = document.getElementById('btn-download');
-const btnListFiles = document.getElementById('btn-listfiles');
-const fileListEl   = document.getElementById('file-list');
+const pill        = document.getElementById('status-pill');
+const editor      = document.getElementById('code-editor');
+const outputEl    = document.getElementById('output');
+const termField   = document.getElementById('term-field');
+const feedbackEl  = document.getElementById('feedback');
+const btnRun      = document.getElementById('btn-run');
+const btnCheck    = document.getElementById('btn-check');
+const btnReset    = document.getElementById('btn-reset');
+const fileUpload  = document.getElementById('file-upload');
+const uploadStatus= document.getElementById('upload-status');
+const dlFilename  = document.getElementById('dl-filename');
+const fileListEl  = document.getElementById('file-list');
 
-// Apply lesson config
 document.getElementById('lesson-title').textContent = LESSON.title;
 document.getElementById('task-bar').innerHTML       = LESSON.task;
 editor.value = LESSON.starter;
 
-// ── State ─────────────────────────────────────────────────────
 let pyodide     = null;
 let capturedOut = [];
 let inputQueue  = [];
 
-// ── Pyodide init ──────────────────────────────────────────────
+// ── Pyodide init ─────────────────────────────────────
 async function initPyodide() {
   try {
     pyodide = await loadPyodide();
@@ -374,79 +259,67 @@ async function initPyodide() {
   } catch(e) {
     pill.textContent = 'Load failed';
     pill.className   = 'status-pill error';
-    termPrint('⚠ Could not load Pyodide. Check your internet connection.\n', 'err');
+    termPrint('⚠ Could not load Pyodide.\n', 'err');
   }
 }
 
-// ── Terminal output ───────────────────────────────────────────
+// ── Terminal helpers ──────────────────────────────────
 function termClear() {
-  outputEl.innerHTML = '';
+  // Remove all chunk spans but keep the input field
+  [...outputEl.querySelectorAll('.chunk')].forEach(el => el.remove());
   capturedOut = [];
 }
 
 function termPrint(text, cls) {
-  // Split by newline to insert <br>-style line breaks as separate spans
+  // Insert a span inline BEFORE the input field (which is always last)
   const span = document.createElement('span');
-  if (cls) span.className = cls;
+  span.className = 'chunk' + (cls ? ' ' + cls : '');
   span.textContent = text;
-  outputEl.appendChild(span);
+  outputEl.insertBefore(span, termField);
   outputEl.scrollTop = outputEl.scrollHeight;
   if (!cls || cls === 'inp') capturedOut.push(text);
 }
 
-// Clicking the terminal area focuses the input field if active
+// Clicking the terminal focuses the input when it's active
 document.getElementById('terminal-wrap').addEventListener('click', () => {
-  if (termInputLine.classList.contains('active')) termField.focus();
+  if (termField.classList.contains('active')) termField.focus();
 });
 
-// ── input() terminal bridge ───────────────────────────────────
-// When Python calls input(prompt):
-//   1. Print the prompt text inline in the terminal
-//   2. Show the invisible input field right after it
-//   3. When Enter is pressed, echo the typed value and resolve the promise
+// ── input() bridge ────────────────────────────────────
+// Print the prompt inline, show the field immediately after — same line.
 function jsInput(promptText) {
   const p = String(promptText ?? '');
   return new Promise(resolve => {
     inputQueue.push({ resolve });
-    // Print prompt into output (no newline yet — user types on same line)
-    termPrint(p);
-    // Show the inline input field
-    termPromptEl.textContent = '';  // prompt already printed above
+    termPrint(p);                         // prompt text printed inline
     termField.value = '';
-    termInputLine.classList.add('active');
+    termField.classList.add('active');    // field appears right after prompt
     termField.focus();
     outputEl.scrollTop = outputEl.scrollHeight;
   });
 }
-window._py_print = (s) => { if (s) termPrint(String(s)); };
-window._py_input = (p)  => jsInput(String(p ?? ''));
 
-function submitTermInput() {
+window._py_print = (s) => { if (s) termPrint(String(s)); };
+
+termField.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
   if (!inputQueue.length) return;
   const { resolve } = inputQueue.shift();
   const val = termField.value;
-  // Echo what the user typed (styled differently so it's clear)
-  termPrint(val + '\n', 'inp');
-  termInputLine.classList.remove('active');
+  termField.classList.remove('active');
   termField.value = '';
+  termPrint(val + '\n', 'inp');          // echo what was typed
   resolve(val);
-  // If more inputs queued, show next
-  if (inputQueue.length) {
-    // This shouldn't normally happen but handle gracefully
-  }
-}
-
-termField.addEventListener('keydown', e => {
-  if (e.key === 'Enter') { e.preventDefault(); submitTermInput(); }
 });
 
-// ── Run ───────────────────────────────────────────────────────
+// ── Run ───────────────────────────────────────────────
 async function runCode() {
   if (!pyodide) return;
   termClear();
   hideFeedback();
   inputQueue = [];
-  termInputLine.classList.remove('active');
+  termField.classList.remove('active');
   setBusy(true);
 
   try {
@@ -484,13 +357,13 @@ await _main()`
     if (cut !== -1) msg = msg.slice(cut);
     termPrint('\n' + msg + '\n', 'err');
   } finally {
-    termInputLine.classList.remove('active');
+    termField.classList.remove('active');
     inputQueue = [];
     setBusy(false);
   }
 }
 
-// ── Check ─────────────────────────────────────────────────────
+// ── Check / Reset / Busy ──────────────────────────────
 function checkCode() {
   const r = LESSON.check(capturedOut);
   feedbackEl.textContent = r.msg;
@@ -498,26 +371,23 @@ function checkCode() {
 }
 function hideFeedback() { feedbackEl.className = 'feedback'; }
 
-// ── Reset ─────────────────────────────────────────────────────
 function resetCode() {
   editor.value = LESSON.starter;
   termClear();
   hideFeedback();
-  termInputLine.classList.remove('active');
+  termField.classList.remove('active');
   uploadStatus.textContent = 'No file chosen';
   fileListEl.textContent   = '';
-  outputEl.innerHTML = '<span class="sys">Run your code to see output…</span>';
+  termPrint('Run your code to see output…', 'sys');
 }
 
-// ── Busy state ────────────────────────────────────────────────
 function setBusy(busy) {
-  btnRun.disabled   = busy;
-  btnCheck.disabled = busy;
-  pill.textContent  = busy ? 'Running…' : 'Python ready';
-  pill.className    = busy ? 'status-pill loading' : 'status-pill';
+  btnRun.disabled = btnCheck.disabled = busy;
+  pill.textContent = busy ? 'Running…' : 'Python ready';
+  pill.className   = busy ? 'status-pill loading' : 'status-pill';
 }
 
-// ── File upload ───────────────────────────────────────────────
+// ── File upload ───────────────────────────────────────
 fileUpload.addEventListener('change', async () => {
   const file = fileUpload.files[0];
   if (!file || !pyodide) return;
@@ -526,10 +396,10 @@ fileUpload.addEventListener('change', async () => {
   try { pyodide.FS.unlink(path); } catch(_) {}
   pyodide.FS.writeFile(path, data);
   uploadStatus.textContent = '✓ ' + file.name;
-  termPrint(`[Uploaded: ${file.name} — use open("${file.name}") to read it]\n`, 'sys');
+  termPrint(`\n[Uploaded: ${file.name} — use open("${file.name}") to read it]\n`, 'sys');
 });
 
-// ── File download ─────────────────────────────────────────────
+// ── File download / list ──────────────────────────────
 function downloadFile() {
   if (!pyodide) return;
   const name = dlFilename.value.trim() || 'output.txt';
@@ -542,7 +412,6 @@ function downloadFile() {
   fileListEl.textContent = `✓ Downloaded: ${name}`;
 }
 
-// ── List files ────────────────────────────────────────────────
 function listFiles() {
   if (!pyodide) return;
   try {
@@ -551,24 +420,22 @@ function listFiles() {
   } catch(_) { fileListEl.textContent = '(no files yet)'; }
 }
 
-// ── Tab key ───────────────────────────────────────────────────
+// ── Tab key in editor ─────────────────────────────────
 editor.addEventListener('keydown', e => {
-  if (e.key === 'Tab') {
-    e.preventDefault();
-    const s = editor.selectionStart;
-    editor.value = editor.value.slice(0, s) + '    ' + editor.value.slice(editor.selectionEnd);
-    editor.selectionStart = editor.selectionEnd = s + 4;
-  }
+  if (e.key !== 'Tab') return;
+  e.preventDefault();
+  const s = editor.selectionStart;
+  editor.value = editor.value.slice(0, s) + '    ' + editor.value.slice(editor.selectionEnd);
+  editor.selectionStart = editor.selectionEnd = s + 4;
 });
 
-// ── Wire buttons ──────────────────────────────────────────────
-btnRun.addEventListener('click',       runCode);
-btnCheck.addEventListener('click',     checkCode);
-btnReset.addEventListener('click',     resetCode);
-btnDownload.addEventListener('click',  downloadFile);
-btnListFiles.addEventListener('click', listFiles);
+// ── Wire buttons ──────────────────────────────────────
+btnRun.addEventListener('click',  runCode);
+btnCheck.addEventListener('click', checkCode);
+btnReset.addEventListener('click', resetCode);
+document.getElementById('btn-download').addEventListener('click',  downloadFile);
+document.getElementById('btn-listfiles').addEventListener('click', listFiles);
 
-// ── Boot ──────────────────────────────────────────────────────
 initPyodide();
 </script>
 </body>
