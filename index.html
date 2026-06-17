@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Python Practice Runner</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
+</head>
+<body>
+  <main class="card">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Python crash course</p>
+        <h1>Variables practice</h1>
+        <p class="intro">Type your Python code, run it, then check whether it meets the task.</p>
+      </div>
+      <span class="badge" id="status">Loading Python…</span>
+    </header>
+
+    <section class="task">
+      <h2>Task</h2>
+      <p>Create a variable called <code>name</code> and print it.</p>
+      <p class="hint">Example idea: store your name in a variable, then use <code>print()</code>.</p>
+    </section>
+
+    <label for="code" class="editor-label">Your code</label>
+    <textarea id="code" spellcheck="false">name = "Dave"
+print(name)</textarea>
+
+    <div class="buttons">
+      <button id="runBtn" disabled>Run code</button>
+      <button id="checkBtn" class="secondary" disabled>Check answer</button>
+      <button id="resetBtn" class="ghost">Reset</button>
+    </div>
+
+    <section>
+      <h2>Output</h2>
+      <pre id="output" class="output">Python is loading...</pre>
+    </section>
+
+    <section>
+      <h2>Feedback</h2>
+      <div id="feedback" class="feedback muted">Run or check your code to see feedback here.</div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
