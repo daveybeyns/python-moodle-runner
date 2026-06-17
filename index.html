@@ -1,82 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Python Crash Course</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Crash Course</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --pink:    #e8185a;
+    --pink-dk: #c01248;
+    --dark:    #111827;
+    --bg:      #fdf0f5;
+    --border:  #f0a0c0;
+  }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #f3f4f6;
+    padding: 16px;
+    font-size: 14px;
+    color: #111;
+  }
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    max-width: 640px;
+    margin: 0 auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  }
+  .card-hdr {
+    background: var(--pink);
+    padding: 14px 18px;
+  }
+  .card-hdr h1 { font-size: 20px; color: #fff; font-weight: 800; }
+  .card-hdr p  { font-size: 12px; color: rgba(255,255,255,.8); margin-top: 2px; }
+
+  .lesson-list { padding: 12px 18px 16px; }
+  .lesson-list h2 {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: #6b7280; margin-bottom: 8px;
+  }
+  .lesson-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid #f3f4f6;
+    text-decoration: none; color: inherit;
+  }
+  .lesson-item:last-child { border-bottom: none; }
+  .lesson-item:hover .lesson-title { color: var(--pink); }
+  .lesson-num {
+    width: 26px; height: 26px;
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: var(--pink);
+    flex-shrink: 0;
+  }
+  .lesson-info { flex: 1; }
+  .lesson-title { font-size: 13px; font-weight: 600; transition: color .15s; }
+  .lesson-desc  { font-size: 11px; color: #6b7280; margin-top: 1px; }
+  .lesson-arrow { color: #d1d5db; font-size: 16px; }
+  .lesson-item:hover .lesson-arrow { color: var(--pink); }
+
+  .embed-note {
+    margin: 0 18px 14px;
+    padding: 8px 12px;
+    background: #fef9c3; border: 1px solid #fde68a;
+    border-radius: 6px; font-size: 11px; color: #713f12; line-height: 1.5;
+  }
+  .embed-note strong { display: block; margin-bottom: 2px; }
+  code { font-family: 'Courier New', monospace; background: rgba(0,0,0,.07); padding: 0 3px; border-radius: 3px; }
+</style>
 </head>
-
 <body>
-  <main class="container">
+<div class="card">
+  <div class="card-hdr">
+    <h1>Python Crash Course</h1>
+    <p>Click a lesson to open it, or embed the URL in Moodle as an iFrame.</p>
+  </div>
 
-    <div class="top-strip">Python Crash Course</div>
+  <div class="lesson-list">
+    <h2>Lessons</h2>
 
-    <section class="lesson-header">
-      <div>
-        <span class="course-tag">Python Crash Course</span>
-        <h1>Lesson 1: Variables and Input</h1>
-        <p>Try the code, run it, then check your answer.</p>
+    <a class="lesson-item" href="lessons/lesson1.html">
+      <div class="lesson-num">1</div>
+      <div class="lesson-info">
+        <div class="lesson-title">Variables and Input</div>
+        <div class="lesson-desc">Using <code>input()</code>, variables, and <code>print()</code></div>
       </div>
-      <span class="status" id="status">Loading Python...</span>
-    </section>
+      <div class="lesson-arrow">›</div>
+    </a>
 
-    <section class="task-box">
-      <strong>Task:</strong> Ask for a name using <code>input()</code>, then print a greeting.
-    </section>
-
-    <section class="work-area">
-
-      <div class="code-panel">
-        <h2>Your code</h2>
-        <textarea id="editor">name = input("Enter your name: ")
-print("Hello " + name)</textarea>
-
-        <div class="button-row">
-          <button id="runBtn">Run</button>
-          <button id="checkBtn">Check</button>
-          <button id="resetBtn" class="secondary">Reset</button>
-        </div>
+    <!-- Add more lessons here by duplicating the <a> block above -->
+    <!-- Example:
+    <a class="lesson-item" href="lessons/lesson2.html">
+      <div class="lesson-num">2</div>
+      <div class="lesson-info">
+        <div class="lesson-title">Conditionals</div>
+        <div class="lesson-desc">if / elif / else statements</div>
       </div>
+      <div class="lesson-arrow">›</div>
+    </a>
+    -->
 
-      <div class="output-panel">
-        <h2>Output</h2>
-        <pre id="output">Ready.</pre>
-      </div>
+  </div>
 
-    </section>
-
-    <section class="feedback-section">
-      <div id="feedback" class="feedback">Feedback appears here.</div>
-    </section>
-
-    <section class="file-section">
-      <details>
-        <summary>Optional text file tools</summary>
-
-        <div class="file-tools">
-          <div>
-            <label for="fileUpload"><strong>Upload a text file for Python to read</strong></label>
-            <input id="fileUpload" type="file" accept=".txt,.csv,.py,.json,.md,text/plain" />
-            <p class="help-text">After upload, Python can read it using <code>open("filename.txt")</code>.</p>
-          </div>
-
-          <div>
-            <label for="downloadName"><strong>Download a file created by Python</strong></label>
-            <div class="download-row">
-              <input id="downloadName" type="text" value="output.txt" />
-              <button id="downloadBtn" type="button">Download</button>
-              <button id="listBtn" type="button" class="secondary">List files</button>
-            </div>
-            <p class="help-text">Example: <code>open("output.txt", "w").write("Hello")</code></p>
-          </div>
-        </div>
-      </details>
-    </section>
-
-  </main>
-
-  <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
-  <script src="script.js"></script>
+  <div class="embed-note">
+    <strong>Moodle embedding</strong>
+    To embed a lesson, add an <strong>iFrame</strong> block with the lesson URL, e.g.<br>
+    <code>https://yourusername.github.io/your-repo/lessons/lesson1.html</code><br>
+    Recommended height: <code>520px</code>. Width: <code>100%</code>.
+  </div>
+</div>
 </body>
 </html>
