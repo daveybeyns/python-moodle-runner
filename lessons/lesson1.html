@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Crash Course – Lesson 1</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pink:      #e8185a;
+    --pink-dk:   #c01248;
+    --bg:        #fdf0f5;
+    --dark:      #111827;
+    --code-bg:   #0f172a;
+    --out-bg:    #0a0f1a;
+    --green:     #4ade80;
+    --border:    #f0a0c0;
+    --pill-bg:   #d1fae5;
+    --pill-fg:   #065f46;
+    --radius:    8px;
+    --mono:      'Courier New', Courier, monospace;
+    --ui:        system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    font-family: var(--ui);
+    background: #f3f4f6;
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .widget {
+    background: #fff;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    max-width: 900px;
+    margin: 0 auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  }
+
+  /* ── Header ─────────────────────────────────────── */
+  .hdr {
+    background: var(--pink);
+    padding: 7px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .hdr-course {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: .12em; color: rgba(255,255,255,.75);
+    text-transform: uppercase;
+  }
+  .hdr-title { font-size: 15px; font-weight: 700; color: #fff; margin-top: 1px; }
+
+  .status-pill {
+    font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px;
+    background: var(--pill-bg); color: var(--pill-fg);
+    white-space: nowrap; transition: background .3s, color .3s;
+  }
+  .status-pill.loading { background: #fef9c3; color: #713f12; }
+  .status-pill.error   { background: #fee2e2; color: #7f1d1d; }
+
+  /* ── Task bar ───────────────────────────────────── */
+  .task-bar {
+    background: var(--dark); color: #e5e7eb;
+    padding: 6px 12px; font-size: 12px; line-height: 1.4;
+  }
+  .task-bar strong { color: #fff; }
+  .task-bar code {
+    font-family: var(--mono);
+    background: rgba(255,255,255,.12);
+    padding: 1px 4px; border-radius: 3px; font-size: 11px;
+  }
+
+  /* ── Editor + Output row ────────────────────────── */
+  .editor-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    background: var(--bg);
+    padding: 8px;
+  }
+  .pane-label {
+    font-size: 11px; font-weight: 700;
+    color: #374151; margin-bottom: 4px;
+    text-transform: uppercase; letter-spacing: .06em;
+  }
+
+  #code-editor {
+    width: 100%;
+    background: var(--code-bg); color: #e2e8f0;
+    font-family: var(--mono); font-size: 12px; line-height: 1.55;
+    border: none; border-radius: 6px;
+    padding: 8px 10px; resize: vertical;
+    min-height: 100px; outline: none;
+    caret-color: var(--pink); tab-size: 4;
+  }
+  #code-editor:focus { box-shadow: 0 0 0 2px var(--pink); }
+
+  #output {
+    background: var(--out-bg); color: var(--green);
+    font-family: var(--mono); font-size: 12px; line-height: 1.55;
+    border-radius: 6px; padding: 8px 10px;
+    min-height: 100px; max-height: 220px;
+    white-space: pre-wrap; word-break: break-word; overflow-y: auto;
+  }
+  #output .err { color: #f87171; }
+  #output .sys { color: #94a3b8; font-style: italic; }
+
+  /* ── input() prompt ─────────────────────────────── */
+  .input-prompt {
+    display: none; background: var(--bg);
+    padding: 4px 8px 8px; gap: 6px; flex-direction: column;
+  }
+  .input-prompt.visible { display: flex; }
+  .input-prompt label { font-size: 11px; font-weight: 600; color: var(--pink); }
+  .input-row { display: flex; gap: 6px; }
+  .input-row input[type="text"] {
+    flex: 1; padding: 5px 8px;
+    border: 1.5px solid var(--border); border-radius: 5px;
+    font-size: 12px; font-family: var(--mono); outline: none;
+  }
+  .input-row input[type="text"]:focus { border-color: var(--pink); }
+
+  /* ── Main buttons ───────────────────────────────── */
+  .controls {
+    display: flex; gap: 6px;
+    padding: 0 8px 8px; background: var(--bg);
+    flex-wrap: wrap; align-items: center;
+  }
+  .btn {
+    padding: 5px 16px; border: none; border-radius: 5px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    transition: background .15s, transform .08s;
+  }
+  .btn:active { transform: scale(.96); }
+  .btn-pink  { background: var(--pink);  color: #fff; }
+  .btn-pink:hover  { background: var(--pink-dk); }
+  .btn-dark  { background: var(--dark);  color: #fff; }
+  .btn-dark:hover  { background: #1f2937; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* ── Feedback ───────────────────────────────────── */
+  .feedback {
+    margin: 0 8px 8px; padding: 6px 10px;
+    border-radius: 5px; font-size: 12px;
+    border: 1.5px solid var(--border);
+    color: #374151; background: #fff; display: none;
+  }
+  .feedback.visible { display: block; }
+  .feedback.ok  { border-color: #6ee7b7; background: #f0fdf4; color: #065f46; }
+  .feedback.bad { border-color: #fca5a5; background: #fef2f2; color: #7f1d1d; }
+
+  /* ── File tools collapsible ─────────────────────── */
+  details.extra {
+    margin: 0 8px 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 5px; overflow: hidden;
+  }
+  details.extra summary {
+    padding: 6px 10px; font-size: 12px; font-weight: 700;
+    cursor: pointer; list-style: none;
+    color: #111; background: #fff; user-select: none;
+  }
+  details.extra summary::-webkit-details-marker { display: none; }
+  details.extra summary::before { content: '▶ '; font-size: 10px; color: var(--pink); }
+  details[open].extra summary::before { content: '▼ '; }
+
+  .extra-body {
+    padding: 10px 12px; background: var(--bg);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .file-section h4 {
+    font-size: 12px; font-weight: 700; color: #111; margin-bottom: 6px;
+  }
+  .file-section p {
+    font-size: 11px; color: #6b7280; margin-top: 4px; font-family: var(--mono);
+  }
+
+  /* Upload */
+  .upload-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--dark); color: #fff;
+    padding: 5px 12px; border-radius: 5px;
+    font-size: 11px; font-weight: 600; cursor: pointer;
+    transition: background .15s;
+  }
+  .upload-label:hover { background: #1f2937; }
+  #file-upload { display: none; }
+  #upload-status {
+    display: inline-block; margin-left: 6px;
+    font-size: 11px; color: var(--pink); font-weight: 600;
+  }
+
+  /* Download */
+  .dl-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .dl-row input[type="text"] {
+    flex: 1; min-width: 100px; padding: 4px 8px;
+    border: 1.5px solid var(--border); border-radius: 5px;
+    font-size: 12px; font-family: var(--mono); outline: none;
+  }
+  .dl-row input[type="text"]:focus { border-color: var(--pink); }
+
+  .btn-sm {
+    padding: 4px 12px; border: none; border-radius: 5px;
+    font-size: 11px; font-weight: 700; cursor: pointer;
+    transition: background .15s;
+  }
+  .btn-sm.pink { background: var(--pink); color: #fff; }
+  .btn-sm.pink:hover { background: var(--pink-dk); }
+  .btn-sm.dark { background: var(--dark); color: #fff; }
+  .btn-sm.dark:hover { background: #1f2937; }
+
+  #file-list {
+    margin-top: 6px; font-size: 11px;
+    font-family: var(--mono); color: #374151;
+    min-height: 16px;
+  }
+
+  @media (max-width: 560px) {
+    .editor-row { grid-template-columns: 1fr; }
+    .extra-body  { grid-template-columns: 1fr; }
+    .hdr-title   { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<div class="widget">
+
+  <!-- ── Header ── -->
+  <div class="hdr">
+    <div>
+      <div class="hdr-course">Python Crash Course</div>
+      <div class="hdr-title" id="lesson-title">Lesson 1: Variables and Input</div>
+    </div>
+    <div class="status-pill loading" id="status-pill">Loading…</div>
+  </div>
+
+  <!-- ── Task bar ── -->
+  <div class="task-bar" id="task-bar">
+    <strong>Task:</strong> Ask for a name using <code>input()</code>, then print a greeting.
+  </div>
+
+  <!-- ── Code + Output ── -->
+  <div class="editor-row">
+    <div>
+      <div class="pane-label">Your code</div>
+      <textarea id="code-editor" spellcheck="false">name = input("Enter your name: ")
+print("Hello " + name)</textarea>
+    </div>
+    <div>
+      <div class="pane-label">Output</div>
+      <div id="output"><span class="sys">Run your code to see output…</span></div>
+    </div>
+  </div>
+
+  <!-- ── input() prompt UI ── -->
+  <div class="input-prompt" id="input-prompt">
+    <label id="input-label">Enter value:</label>
+    <div class="input-row">
+      <input type="text" id="input-field" placeholder="Type here and press Enter…">
+      <button class="btn btn-pink" id="input-submit">Submit</button>
+    </div>
+  </div>
+
+  <!-- ── Run / Check / Reset ── -->
+  <div class="controls">
+    <button class="btn btn-pink" id="btn-run"   disabled>Run</button>
+    <button class="btn btn-pink" id="btn-check" disabled>Check</button>
+    <button class="btn btn-dark" id="btn-reset">Reset</button>
+  </div>
+
+  <!-- ── Feedback ── -->
+  <div class="feedback" id="feedback"></div>
+
+  <!-- ── Optional text file tools ── -->
+  <details class="extra">
+    <summary>Optional text file tools</summary>
+    <div class="extra-body">
+
+      <!-- Upload -->
+      <div class="file-section">
+        <h4>Upload a text file for Python to read</h4>
+        <label class="upload-label" for="file-upload">
+          📂 Choose File
+        </label>
+        <span id="upload-status">No file chosen</span>
+        <input type="file" id="file-upload" accept=".txt,.csv,.dat,.json">
+        <p>After upload, Python can read it using<br><code>open("filename.txt")</code></p>
+      </div>
+
+      <!-- Download -->
+      <div class="file-section">
+        <h4>Download a file created by Python</h4>
+        <div class="dl-row">
+          <input type="text" id="dl-filename" value="output.txt" placeholder="filename.txt">
+          <button class="btn-sm pink" id="btn-download">Download</button>
+          <button class="btn-sm dark" id="btn-listfiles">List files</button>
+        </div>
+        <div id="file-list"></div>
+        <p>Example: <code>open("output.txt","w").write("Hello")</code></p>
+      </div>
+
+    </div>
+  </details>
+
+</div><!-- /.widget -->
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.27.5/full/pyodide.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  LESSON CONFIG  — edit only this block for each lesson
+// ═══════════════════════════════════════════════════════════════
+const LESSON = {
+  title:   "Lesson 1: Variables and Input",
+  task:    `<strong>Task:</strong> Ask for a name using <code>input()</code>, then print a greeting.`,
+  starter: `name = input("Enter your name: ")\nprint("Hello " + name)`,
+  check(outputLines) {
+    const out = outputLines.join("\n").toLowerCase();
+    if (out.includes("hello"))
+      return { ok: true,  msg: "✓ Great — you printed a greeting!" };
+    return { ok: false, msg: "✗ Output doesn't contain a greeting yet. Make sure you print 'Hello' followed by the name." };
+  }
+};
+// ═══════════════════════════════════════════════════════════════
+
+// ── DOM refs ──────────────────────────────────────────────────
+const pill        = document.getElementById('status-pill');
+const editor      = document.getElementById('code-editor');
+const outputEl    = document.getElementById('output');
+const feedbackEl  = document.getElementById('feedback');
+const inputPrompt = document.getElementById('input-prompt');
+const inputLabel  = document.getElementById('input-label');
+const inputField  = document.getElementById('input-field');
+const btnRun      = document.getElementById('btn-run');
+const btnCheck    = document.getElementById('btn-check');
+const btnReset    = document.getElementById('btn-reset');
+const fileUpload  = document.getElementById('file-upload');
+const uploadStatus= document.getElementById('upload-status');
+const dlFilename  = document.getElementById('dl-filename');
+const btnDownload = document.getElementById('btn-download');
+const btnListFiles= document.getElementById('btn-listfiles');
+const fileListEl  = document.getElementById('file-list');
+
+// Apply config
+document.getElementById('lesson-title').textContent = LESSON.title;
+document.getElementById('task-bar').innerHTML       = LESSON.task;
+editor.value = LESSON.starter;
+
+// ── State ─────────────────────────────────────────────────────
+let pyodide      = null;
+let capturedOut  = [];    // text chunks printed to stdout
+let inputQueue   = [];    // pending {prompt, resolve} from input()
+
+// ── Pyodide init ──────────────────────────────────────────────
+async function initPyodide() {
+  try {
+    pyodide = await loadPyodide();
+    // Create /work dir for user files
+    pyodide.FS.mkdir('/work');
+    pyodide.FS.chdir('/work');
+    pill.textContent = 'Python ready';
+    pill.className   = 'status-pill';
+    btnRun.disabled   = false;
+    btnCheck.disabled = false;
+  } catch(e) {
+    pill.textContent = 'Load failed';
+    pill.className   = 'status-pill error';
+    appendOut('⚠ Could not load Pyodide. Check your internet connection.\n', 'err');
+  }
+}
+
+// ── Output helpers ────────────────────────────────────────────
+function clearOutput() {
+  outputEl.innerHTML = '';
+  capturedOut = [];
+}
+function appendOut(text, cls) {
+  const s = document.createElement('span');
+  if (cls) s.className = cls;
+  s.textContent = text;
+  outputEl.appendChild(s);
+  outputEl.scrollTop = outputEl.scrollHeight;
+  capturedOut.push(text);
+}
+
+// ── input() bridge ────────────────────────────────────────────
+// Called from Python via Pyodide's JS bridge.
+// Returns a JS Promise that resolves when the student submits.
+function jsInput(promptText) {
+  const p = String(promptText ?? '');
+  return new Promise(resolve => {
+    inputQueue.push({ prompt: p, resolve });
+    showInputPrompt(p);
+  });
+}
+window.jsInput = jsInput;   // exposed to Python
+
+function showInputPrompt(p) {
+  inputLabel.textContent = p || 'Enter value:';
+  inputField.value = '';
+  inputPrompt.classList.add('visible');
+  inputField.focus();
+}
+
+function submitInput() {
+  if (!inputQueue.length) return;
+  const { prompt, resolve } = inputQueue.shift();
+  const val = inputField.value;
+  // Echo prompt + value to output (mimics terminal behaviour)
+  appendOut(prompt + val + '\n');
+  inputPrompt.classList.remove('visible');
+  inputField.value = '';
+  resolve(val);
+  if (inputQueue.length) showInputPrompt(inputQueue[0].prompt);
+}
+
+document.getElementById('input-submit').addEventListener('click', submitInput);
+inputField.addEventListener('keydown', e => { if (e.key === 'Enter') submitInput(); });
+
+// ── Run ───────────────────────────────────────────────────────
+async function runCode() {
+  if (!pyodide) return;
+  clearOutput();
+  hideFeedback();
+  inputQueue = [];
+  inputPrompt.classList.remove('visible');
+  setBusy(true);
+
+  // Install stdout redirect + input() patch
+  pyodide.globals.set('_js_print', (s) => { if (s) appendOut(String(s)); });
+  pyodide.globals.set('_js_input', jsInput);
+
+  try {
+    pyodide.runPython(`
+import sys, builtins, js
+
+class _Out:
+    def write(self, s):
+        if s: js._js_print(s)
+    def flush(self): pass
+
+sys.stdout = _Out()
+sys.stderr = _Out()
+
+def _input(prompt=''):
+    return js._js_input(str(prompt))
+
+builtins.input = _input
+`);
+
+    // Wrap user code in async def so awaiting input() works
+    const indented = editor.value.split('\n').map(l => '    ' + l).join('\n');
+    await pyodide.runPythonAsync(
+`import asyncio
+async def _main():
+${indented}
+await _main()`
+    );
+
+  } catch(err) {
+    // Clean up the Python traceback a little
+    const msg = String(err)
+      .replace(/^  File "<exec>".*\n?/gm, '')
+      .trim();
+    appendOut('\n' + msg + '\n', 'err');
+  } finally {
+    inputPrompt.classList.remove('visible');
+    inputQueue = [];
+    setBusy(false);
+  }
+}
+
+// ── Check ─────────────────────────────────────────────────────
+function checkCode() {
+  const r = LESSON.check(capturedOut);
+  feedbackEl.textContent = r.msg;
+  feedbackEl.className   = 'feedback visible ' + (r.ok ? 'ok' : 'bad');
+}
+function hideFeedback() { feedbackEl.className = 'feedback'; }
+
+// ── Reset ─────────────────────────────────────────────────────
+function resetCode() {
+  editor.value = LESSON.starter;
+  clearOutput();
+  hideFeedback();
+  inputPrompt.classList.remove('visible');
+  uploadStatus.textContent = 'No file chosen';
+  fileListEl.textContent   = '';
+  outputEl.innerHTML = '<span class="sys">Run your code to see output…</span>';
+}
+
+// ── Busy state ────────────────────────────────────────────────
+function setBusy(busy) {
+  btnRun.disabled   = busy;
+  btnCheck.disabled = busy;
+  pill.textContent  = busy ? 'Running…' : 'Python ready';
+  if (busy) pill.className = 'status-pill loading';
+  else      pill.className = 'status-pill';
+}
+
+// ── File upload → Pyodide FS ──────────────────────────────────
+fileUpload.addEventListener('change', async () => {
+  const file = fileUpload.files[0];
+  if (!file || !pyodide) return;
+  const buf  = await file.arrayBuffer();
+  const data = new Uint8Array(buf);
+  const path = '/work/' + file.name;
+  try { pyodide.FS.unlink(path); } catch(_) {}
+  pyodide.FS.writeFile(path, data);
+  uploadStatus.textContent = '✓ ' + file.name;
+  appendOut(`[File uploaded: ${file.name} (${data.length} bytes) — readable as open("${file.name}")]\n`, 'sys');
+});
+
+// ── Download from Pyodide FS ──────────────────────────────────
+function downloadFile() {
+  if (!pyodide) return;
+  const name = dlFilename.value.trim() || 'output.txt';
+  const path = '/work/' + name;
+  let data;
+  try {
+    data = pyodide.FS.readFile(path);
+  } catch(_) {
+    fileListEl.textContent = `✗ File not found: ${name}`;
+    return;
+  }
+  const blob = new Blob([data]);
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = name; a.click();
+  URL.revokeObjectURL(url);
+  fileListEl.textContent = `✓ Downloaded: ${name}`;
+}
+
+// ── List files in /work ───────────────────────────────────────
+function listFiles() {
+  if (!pyodide) return;
+  try {
+    const entries = pyodide.FS.readdir('/work')
+      .filter(f => f !== '.' && f !== '..');
+    fileListEl.textContent = entries.length
+      ? 'Files: ' + entries.join(', ')
+      : '(no files yet)';
+  } catch(_) {
+    fileListEl.textContent = '(no files yet)';
+  }
+}
+
+// ── Tab key in editor ─────────────────────────────────────────
+editor.addEventListener('keydown', e => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const s = editor.selectionStart;
+    editor.value = editor.value.slice(0, s) + '    ' + editor.value.slice(editor.selectionEnd);
+    editor.selectionStart = editor.selectionEnd = s + 4;
+  }
+});
+
+// ── Wire up buttons ───────────────────────────────────────────
+btnRun.addEventListener('click',       runCode);
+btnCheck.addEventListener('click',     checkCode);
+btnReset.addEventListener('click',     resetCode);
+btnDownload.addEventListener('click',  downloadFile);
+btnListFiles.addEventListener('click', listFiles);
+
+// ── Boot ──────────────────────────────────────────────────────
+initPyodide();
+</script>
+</body>
+</html>
