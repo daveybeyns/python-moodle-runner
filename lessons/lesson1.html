@@ -438,11 +438,10 @@ async function runCode() {
   setBusy(true);
 
   try {
-    // Redirect stdout/stderr and patch input() using window-level functions
-    // which are always visible to Pyodide's `js` module
+    // Set up stdout/stderr redirect via window global
     pyodide.runPython(`
 import sys, builtins
-from js import _py_print, _py_input
+from js import _py_print
 
 class _Out:
     def write(self, s):
@@ -451,18 +450,25 @@ class _Out:
 
 sys.stdout = _Out()
 sys.stderr = _Out()
-
-def _input(prompt=''):
-    return _py_input(str(prompt))
-
-builtins.input = _input
 `);
 
-    // Wrap user code in an async function so input() (which returns a
-    // JS Promise) is properly awaited by Pyodide's event loop bridge
-    const indented = editor.value.split('\n').map(l => '    ' + l).join('\n');
+    // Store the JS input function in Python globals so Python can call it
+    pyodide.globals.set('_js_input_fn', (prompt) => jsInput(String(prompt ?? '')));
+
+    // Transform user code: wrap in async def and replace input(...) with
+    // await _async_input(...) so Pyodide's event loop can resolve the JS Promise
+    const userCode = editor.value;
+
+    // Replace  input(  →  await _async_input(  in the user's source
+    const transformed = userCode.replace(/\binput\s*\(/g, 'await _async_input(');
+    const indented = transformed.split('\n').map(l => '    ' + l).join('\n');
+
     await pyodide.runPythonAsync(
-`async def _main():
+`async def _async_input(prompt=''):
+    result = await _js_input_fn(str(prompt))
+    return str(result)
+
+async def _main():
 ${indented}
 await _main()`
     );
