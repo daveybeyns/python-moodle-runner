@@ -24,19 +24,26 @@
       <p class="hint">Example idea: store your name in a variable, then use <code>print()</code>.</p>
     </section>
 
-    <label for="code" class="editor-label">Your code</label>
-    <textarea id="code" spellcheck="false">name = "Dave" print(name)</textarea>
+<div class="work-area">
 
-    <div class="buttons">
-      <button id="runBtn" disabled>Run code</button>
-      <button id="checkBtn" class="secondary" disabled>Check answer</button>
-      <button id="resetBtn" class="ghost">Reset</button>
+  <div class="code-panel">
+    <label for="editor">Your code</label>
+    <textarea id="editor">name = "Dave"
+print(name)</textarea>
+
+    <div class="button-row">
+      <button id="runBtn">Run code</button>
+      <button id="checkBtn">Check answer</button>
+      <button id="resetBtn" class="secondary">Reset</button>
     </div>
+  </div>
 
-    <section>
-      <h2>Output</h2>
-      <pre id="output" class="output">Python is loading...</pre>
-    </section>
+  <div class="output-panel">
+    <h2>Output</h2>
+    <pre id="output">Ready. Type some Python and click Run code.</pre>
+  </div>
+
+</div>
 
     <section>
       <h2>Feedback</h2>
