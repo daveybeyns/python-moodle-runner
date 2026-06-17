@@ -6,51 +6,50 @@
   <title>Python Crash Course</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <main class="app-shell">
-    <header class="top-bar">
+  <main class="container">
+
+    <div class="top-strip">Python Crash Course</div>
+
+    <section class="lesson-header">
       <div>
         <span class="course-tag">Python Crash Course</span>
         <h1>Lesson 1: Variables</h1>
         <p>Try the code, run it, then check your answer.</p>
       </div>
-      <div class="status-pill" id="status">Loading Python...</div>
-    </header>
+      <span class="status" id="status">Loading Python...</span>
+    </section>
 
-    <section class="task-strip">
+    <section class="task-box">
       <strong>Task:</strong> Create a variable called <code>name</code> and print it.
     </section>
 
     <section class="work-area">
-      <section class="panel code-panel">
-        <div class="panel-title-row">
-          <h2>Your code</h2>
-          <span class="mini-label">Python</span>
-        </div>
 
-        <textarea id="editor" spellcheck="false">name = "Dave"
+      <div class="code-panel">
+        <h2>Your code</h2>
+        <textarea id="editor">name = "Dave"
 print(name)</textarea>
 
         <div class="button-row">
-          <button id="runBtn" type="button">Run</button>
-          <button id="checkBtn" type="button">Check</button>
-          <button id="resetBtn" type="button" class="secondary">Reset</button>
+          <button id="runBtn">Run</button>
+          <button id="checkBtn">Check</button>
+          <button id="resetBtn" class="secondary">Reset</button>
         </div>
-      </section>
+      </div>
 
-      <section class="panel output-panel">
-        <div class="panel-title-row">
-          <h2>Output</h2>
-          <span class="mini-label output-label">Result</span>
-        </div>
-        <pre id="output">Python is loading...</pre>
-      </section>
+      <div class="output-panel">
+        <h2>Output</h2>
+        <pre id="output">Ready.</pre>
+      </div>
+
     </section>
 
-    <section class="feedback-row">
-      <strong>Feedback:</strong>
-      <div id="feedback" class="feedback">Wait for Python to load, then run your code.</div>
+    <section class="feedback-section">
+      <div id="feedback" class="feedback">Feedback appears here.</div>
     </section>
+
   </main>
 
   <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
