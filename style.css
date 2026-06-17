@@ -217,7 +217,7 @@ body {
 }
 
 /* FORCE STACKING ON NARROW MOODLE/IFRAME WIDTHS */
-@media (max-width: 1200px) {
+@media (max-width: 800px) {
     .work-area {
         display: flex;
         flex-direction: column;
