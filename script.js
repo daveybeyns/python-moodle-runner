@@ -1,127 +1,66 @@
-const starterCode = `name = "Dave"
+let pyodideReadyPromise = loadPyodide();
+let startingCode = `name = "Dave"
 print(name)`;
 
-const codeBox = document.getElementById("code");
-const outputBox = document.getElementById("output");
-const feedbackBox = document.getElementById("feedback");
-const statusBadge = document.getElementById("status");
-const runBtn = document.getElementById("runBtn");
-const checkBtn = document.getElementById("checkBtn");
-const resetBtn = document.getElementById("resetBtn");
+const editor = document.getElementById("editor");
+const output = document.getElementById("output");
+const feedback = document.getElementById("feedback");
+const statusBox = document.getElementById("status");
 
-let pyodide;
+editor.value = startingCode;
 
-function setFeedback(message, type = "muted") {
-  feedbackBox.textContent = message;
-  feedbackBox.className = `feedback ${type}`;
+async function initPyodide() {
+  statusBox.textContent = "Loading Python...";
+  window.pyodide = await pyodideReadyPromise;
+  statusBox.textContent = "Python ready";
+  output.textContent = "Ready.";
 }
 
-function setOutput(message) {
-  outputBox.textContent = message || "";
-}
+initPyodide();
 
-async function startPython() {
-  try {
-    pyodide = await loadPyodide();
-    statusBadge.textContent = "Python ready";
-    statusBadge.className = "badge ready";
-    runBtn.disabled = false;
-    checkBtn.disabled = false;
-    setOutput("Ready. Type some Python and click Run code.");
-  } catch (error) {
-    statusBadge.textContent = "Python failed to load";
-    statusBadge.className = "badge error";
-    setOutput(error.message);
-    setFeedback("Pyodide could not load. This may be blocked by the network or browser settings.", "bad");
-  }
-}
-
-async function runStudentCode() {
-  setOutput("Running...");
-  setFeedback("Running your code...", "muted");
-
-  const studentCode = codeBox.value;
-
-  const wrappedCode = `
-import sys, io, traceback
-_stdout = io.StringIO()
-_stderr = io.StringIO()
-_old_stdout = sys.stdout
-_old_stderr = sys.stderr
-sys.stdout = _stdout
-sys.stderr = _stderr
-try:
-${studentCode.split("\n").map(line => "    " + line).join("\n")}
-except Exception:
-    traceback.print_exc()
-finally:
-    sys.stdout = _old_stdout
-    sys.stderr = _old_stderr
-result = _stdout.getvalue() + _stderr.getvalue()
-`;
+async function runCode() {
+  output.textContent = "Running...";
+  feedback.textContent = "Running your code...";
 
   try {
-    await pyodide.runPythonAsync(wrappedCode);
-    const result = pyodide.globals.get("result");
-    setOutput(result || "Code ran successfully with no output.");
-    setFeedback("Code ran. Now click Check answer to test the task.", "muted");
-  } catch (error) {
-    setOutput(error.message);
-    setFeedback("There is an error in your code. Read the output and try again.", "bad");
+    const pyodide = await pyodideReadyPromise;
+
+    pyodide.runPython(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+sys.stderr = sys.stdout
+`);
+
+    await pyodide.runPythonAsync(editor.value);
+
+    const result = pyodide.runPython("sys.stdout.getvalue()");
+    output.textContent = result || "Code ran successfully. No output.";
+    feedback.textContent = "Code ran successfully.";
+  } catch (err) {
+    output.textContent = err;
+    feedback.textContent = "There is an error in your code.";
   }
 }
 
 async function checkAnswer() {
-  setOutput("Checking...");
-  setFeedback("Checking your answer...", "muted");
+  await runCode();
 
-  const studentCode = codeBox.value;
+  const code = editor.value;
 
-  // This is the teacher-controlled test for this exercise.
-  // Change this section for each task.
-  const testCode = `
-import sys, io, traceback
-_test_output = io.StringIO()
-_old_stdout = sys.stdout
-sys.stdout = _test_output
-check_message = ""
-check_passed = False
-try:
-${studentCode.split("\n").map(line => "    " + line).join("\n")}
-    sys.stdout = _old_stdout
-
-    if "name" not in globals():
-        check_message = "You need to create a variable called name."
-    elif not isinstance(name, str):
-        check_message = "The variable name should contain text, such as your name in quote marks."
-    elif str(name) not in _test_output.getvalue():
-        check_message = "You created name, but you also need to print it."
-    else:
-        check_passed = True
-        check_message = "Correct — you created a variable called name and printed it."
-except Exception:
-    sys.stdout = _old_stdout
-    check_message = traceback.format_exc()
-`;
-
-  try {
-    await pyodide.runPythonAsync(testCode);
-    const passed = pyodide.globals.get("check_passed");
-    const message = pyodide.globals.get("check_message");
-    setOutput(message);
-    setFeedback(message, passed ? "ok" : "bad");
-  } catch (error) {
-    setOutput(error.message);
-    setFeedback("The checker found an error. Try fixing your code and check again.", "bad");
+  if (code.includes("name") && code.includes("print")) {
+    feedback.textContent = "✅ Correct. You created a variable called name and printed it.";
+  } else {
+    feedback.textContent = "❌ Not quite. Make sure you create a variable called name and use print().";
   }
 }
 
-runBtn.addEventListener("click", runStudentCode);
-checkBtn.addEventListener("click", checkAnswer);
-resetBtn.addEventListener("click", () => {
-  codeBox.value = starterCode;
-  setOutput("Code reset.");
-  setFeedback("Run or check your code to see feedback here.", "muted");
-});
+function resetCode() {
+  editor.value = startingCode;
+  output.textContent = "Ready.";
+  feedback.textContent = "Feedback appears here.";
+}
 
-startPython();
+document.getElementById("runBtn").addEventListener("click", runCode);
+document.getElementById("checkBtn").addEventListener("click", checkAnswer);
+document.getElementById("resetBtn").addEventListener("click", resetCode);
