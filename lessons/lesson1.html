@@ -425,6 +425,10 @@ document.getElementById('input-submit').addEventListener('click', submitInput);
 inputField.addEventListener('keydown', e => { if (e.key === 'Enter') submitInput(); });
 
 // ── Run ───────────────────────────────────────────────────────
+// Expose bridge functions on window so Python's `js` module can see them
+window._py_print = function(s) { if (s) appendOut(String(s)); };
+window._py_input = function(promptText) { return jsInput(String(promptText ?? '')); };
+
 async function runCode() {
   if (!pyodide) return;
   clearOutput();
@@ -433,43 +437,43 @@ async function runCode() {
   inputPrompt.classList.remove('visible');
   setBusy(true);
 
-  // Install stdout redirect + input() patch
-  pyodide.globals.set('_js_print', (s) => { if (s) appendOut(String(s)); });
-  pyodide.globals.set('_js_input', jsInput);
-
   try {
+    // Redirect stdout/stderr and patch input() using window-level functions
+    // which are always visible to Pyodide's `js` module
     pyodide.runPython(`
-import sys, builtins, js
+import sys, builtins
+from js import _py_print, _py_input
 
 class _Out:
     def write(self, s):
-        if s: js._js_print(s)
+        if s: _py_print(s)
     def flush(self): pass
 
 sys.stdout = _Out()
 sys.stderr = _Out()
 
 def _input(prompt=''):
-    return js._js_input(str(prompt))
+    return _py_input(str(prompt))
 
 builtins.input = _input
 `);
 
-    // Wrap user code in async def so awaiting input() works
+    // Wrap user code in an async function so input() (which returns a
+    // JS Promise) is properly awaited by Pyodide's event loop bridge
     const indented = editor.value.split('\n').map(l => '    ' + l).join('\n');
     await pyodide.runPythonAsync(
-`import asyncio
-async def _main():
+`async def _main():
 ${indented}
 await _main()`
     );
 
   } catch(err) {
-    // Clean up the Python traceback a little
-    const msg = String(err)
-      .replace(/^  File "<exec>".*\n?/gm, '')
-      .trim();
-    appendOut('\n' + msg + '\n', 'err');
+    // Tidy up the traceback – strip internal pyodide frame noise
+    let msg = String(err);
+    // Keep only lines from the SyntaxError / runtime error onwards
+    const cut = msg.indexOf('Error:');
+    if (cut !== -1) msg = msg.slice(cut);
+    appendOut(msg + '\n', 'err');
   } finally {
     inputPrompt.classList.remove('visible');
     inputQueue = [];
