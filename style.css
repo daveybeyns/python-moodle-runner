@@ -153,3 +153,40 @@ button.ghost { background: #e5e7eb; color: var(--college-dark); }
   .hero { flex-direction: column; }
   .badge { white-space: normal; }
 }
+
+.work-area {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.code-panel,
+.output-panel {
+  flex: 1;
+  min-width: 0;
+}
+
+.code-panel textarea {
+  width: 100%;
+}
+
+.output-panel pre {
+  min-height: 250px;
+}
+
+/* Buttons stay under Your code only */
+.button-row {
+  margin-top: 16px;
+}
+
+/* On narrow screens, stack them vertically */
+@media (max-width: 850px) {
+  .work-area {
+    flex-direction: column;
+  }
+
+  .code-panel,
+  .output-panel {
+    width: 100%;
+  }
+}
