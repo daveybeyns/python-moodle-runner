@@ -215,3 +215,34 @@ body {
 ```
 
 }
+
+/* FORCE STACKING ON NARROW MOODLE/IFRAME WIDTHS */
+@media (max-width: 1200px) {
+    .work-area {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .code-panel,
+    .output-panel {
+        width: 100%;
+        flex: none;
+    }
+
+    textarea,
+    #output {
+        width: 100%;
+        min-height: 260px;
+    }
+
+    .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    button {
+        margin-right: 0;
+    }
+}
