@@ -1,10 +1,10 @@
-# Pyodide Moodle Starter
+# Pyodide Moodle Compact Colour Starter
 
-A simple browser-based Python runner designed to be hosted on GitHub Pages and embedded in Moodle.
+A compact, Moodle-friendly Python runner using Pyodide and GitHub Pages.
 
 Files:
-- `index.html` - page structure
-- `style.css` - visual styling
-- `script.js` - Pyodide runner and checker logic
+- index.html: page structure and task text
+- style.css: compact NPTC-inspired colours and layout
+- script.js: Pyodide loading, run button, reset button, simple answer checking
 
-Edit the task text in `index.html`, and edit the answer-checking logic inside `checkAnswer()` in `script.js`.
+Upload these files to your GitHub repository root and enable GitHub Pages.
