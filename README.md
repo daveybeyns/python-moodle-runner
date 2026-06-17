@@ -1,10 +1,37 @@
-# Pyodide Moodle Compact Colour Starter
+# Pyodide Moodle Python Runner
 
-A compact, Moodle-friendly Python runner using Pyodide and GitHub Pages.
+This version supports:
 
-Files:
-- index.html: page structure and task text
-- style.css: compact NPTC-inspired colours and layout
-- script.js: Pyodide loading, run button, reset button, simple answer checking
+- print()
+- input()
+- int(input())
+- multiple input() calls
+- reading uploaded text files with open("filename.txt")
+- writing files with open("output.txt", "w")
+- downloading files created by Python
 
-Upload these files to your GitHub repository root and enable GitHub Pages.
+Example input code:
+
+```python
+name = input("Enter your name: ")
+age = int(input("Enter your age: "))
+print("Hello", name)
+print("Next year you will be", age + 1)
+```
+
+Example file reading:
+
+```python
+file = open("names.txt")
+for line in file:
+    print(line.strip())
+file.close()
+```
+
+Example file writing:
+
+```python
+file = open("output.txt", "w")
+file.write("Hello from Python")
+file.close()
+```

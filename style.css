@@ -141,6 +141,7 @@ textarea {
   font-size: 0.95rem;
   line-height: 1.4;
   overflow: auto;
+  white-space: pre-wrap;
 }
 
 .button-row {
@@ -170,7 +171,7 @@ button.secondary {
 }
 
 .feedback-section {
-  padding: 5px 18px 18px;
+  padding: 5px 18px 10px;
 }
 
 .feedback {
@@ -193,6 +194,56 @@ button.secondary {
   border-color: #f30b5d;
 }
 
+.file-section {
+  padding: 0 18px 18px;
+}
+
+.file-section details {
+  background: white;
+  border: 2px solid var(--pink);
+  border-radius: 12px;
+  padding: 9px 12px;
+}
+
+.file-section summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.file-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.file-tools input[type="file"],
+.file-tools input[type="text"] {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.download-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.download-row input {
+  flex: 1;
+  min-width: 120px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.help-text {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 @media (max-width: 700px) {
   body {
     padding: 6px;
@@ -203,7 +254,8 @@ button.secondary {
     align-items: flex-start;
   }
 
-  .work-area {
+  .work-area,
+  .file-tools {
     grid-template-columns: 1fr;
     gap: 12px;
   }
