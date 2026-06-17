@@ -40,13 +40,11 @@
     box-shadow: 0 2px 8px rgba(0,0,0,.08);
   }
 
-  /* ── Header ─────────────────────────────────────── */
+  /* ── Header ── */
   .hdr {
     background: var(--pink);
     padding: 7px 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between;
   }
   .hdr-course {
     font-size: 10px; font-weight: 700;
@@ -54,7 +52,6 @@
     text-transform: uppercase;
   }
   .hdr-title { font-size: 15px; font-weight: 700; color: #fff; margin-top: 1px; }
-
   .status-pill {
     font-size: 11px; font-weight: 600;
     padding: 3px 10px; border-radius: 20px;
@@ -64,7 +61,7 @@
   .status-pill.loading { background: #fef9c3; color: #713f12; }
   .status-pill.error   { background: #fee2e2; color: #7f1d1d; }
 
-  /* ── Task bar ───────────────────────────────────── */
+  /* ── Task bar ── */
   .task-bar {
     background: var(--dark); color: #e5e7eb;
     padding: 6px 12px; font-size: 12px; line-height: 1.4;
@@ -76,7 +73,7 @@
     padding: 1px 4px; border-radius: 3px; font-size: 11px;
   }
 
-  /* ── Editor + Output row ────────────────────────── */
+  /* ── Editor + Output row ── */
   .editor-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -101,32 +98,64 @@
   }
   #code-editor:focus { box-shadow: 0 0 0 2px var(--pink); }
 
+  /* ── Terminal pane ── */
+  .terminal-wrap {
+    background: var(--out-bg);
+    border-radius: 6px;
+    display: flex; flex-direction: column;
+    min-height: 100px; max-height: 240px;
+    overflow: hidden;
+    cursor: text;
+  }
+  /* macOS-style titlebar */
+  .term-bar {
+    background: #1a2035;
+    padding: 5px 8px 4px;
+    display: flex; gap: 5px; align-items: center;
+    flex-shrink: 0;
+  }
+  .term-bar span { width: 9px; height: 9px; border-radius: 50%; }
+  .tb-r { background: #ff5f57; }
+  .tb-y { background: #ffbd2e; }
+  .tb-g { background: #28c840; }
+
+  /* Scrollable output history */
   #output {
-    background: var(--out-bg); color: var(--green);
-    font-family: var(--mono); font-size: 12px; line-height: 1.55;
-    border-radius: 6px; padding: 8px 10px;
-    min-height: 100px; max-height: 220px;
-    white-space: pre-wrap; word-break: break-word; overflow-y: auto;
+    flex: 1;
+    color: var(--green);
+    font-family: var(--mono); font-size: 12px; line-height: 1.6;
+    padding: 6px 10px 2px;
+    white-space: pre-wrap; word-break: break-word;
+    overflow-y: auto;
   }
-  #output .err { color: #f87171; }
-  #output .sys { color: #94a3b8; font-style: italic; }
+  #output .err  { color: #f87171; }
+  #output .sys  { color: #64748b; font-style: italic; }
+  #output .inp  { color: #e2e8f0; } /* user-typed text echo */
 
-  /* ── input() prompt ─────────────────────────────── */
-  .input-prompt {
-    display: none; background: var(--bg);
-    padding: 4px 8px 8px; gap: 6px; flex-direction: column;
+  /* Inline input line — lives inside the terminal */
+  .term-input-line {
+    display: none;
+    align-items: baseline;
+    padding: 0 10px 6px;
+    gap: 0;
+    flex-shrink: 0;
   }
-  .input-prompt.visible { display: flex; }
-  .input-prompt label { font-size: 11px; font-weight: 600; color: var(--pink); }
-  .input-row { display: flex; gap: 6px; }
-  .input-row input[type="text"] {
-    flex: 1; padding: 5px 8px;
-    border: 1.5px solid var(--border); border-radius: 5px;
-    font-size: 12px; font-family: var(--mono); outline: none;
+  .term-input-line.active { display: flex; }
+  #term-prompt {
+    color: var(--green);
+    font-family: var(--mono); font-size: 12px;
+    white-space: pre; flex-shrink: 0;
   }
-  .input-row input[type="text"]:focus { border-color: var(--pink); }
+  #term-field {
+    flex: 1; min-width: 4ch;
+    background: transparent; border: none; outline: none;
+    color: #fff;
+    font-family: var(--mono); font-size: 12px;
+    caret-color: #fff;
+    padding: 0;
+  }
 
-  /* ── Main buttons ───────────────────────────────── */
+  /* ── Buttons ── */
   .controls {
     display: flex; gap: 6px;
     padding: 0 8px 8px; background: var(--bg);
@@ -138,13 +167,13 @@
     transition: background .15s, transform .08s;
   }
   .btn:active { transform: scale(.96); }
-  .btn-pink  { background: var(--pink);  color: #fff; }
-  .btn-pink:hover  { background: var(--pink-dk); }
-  .btn-dark  { background: var(--dark);  color: #fff; }
-  .btn-dark:hover  { background: #1f2937; }
+  .btn-pink { background: var(--pink); color: #fff; }
+  .btn-pink:hover { background: var(--pink-dk); }
+  .btn-dark { background: var(--dark); color: #fff; }
+  .btn-dark:hover { background: #1f2937; }
   .btn:disabled { opacity: .5; cursor: not-allowed; }
 
-  /* ── Feedback ───────────────────────────────────── */
+  /* ── Feedback ── */
   .feedback {
     margin: 0 8px 8px; padding: 6px 10px;
     border-radius: 5px; font-size: 12px;
@@ -155,7 +184,7 @@
   .feedback.ok  { border-color: #6ee7b7; background: #f0fdf4; color: #065f46; }
   .feedback.bad { border-color: #fca5a5; background: #fef2f2; color: #7f1d1d; }
 
-  /* ── File tools collapsible ─────────────────────── */
+  /* ── File tools ── */
   details.extra {
     margin: 0 8px 8px;
     border: 1.5px solid var(--border);
@@ -169,36 +198,21 @@
   details.extra summary::-webkit-details-marker { display: none; }
   details.extra summary::before { content: '▶ '; font-size: 10px; color: var(--pink); }
   details[open].extra summary::before { content: '▼ '; }
-
   .extra-body {
     padding: 10px 12px; background: var(--bg);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
   }
-  .file-section h4 {
-    font-size: 12px; font-weight: 700; color: #111; margin-bottom: 6px;
-  }
-  .file-section p {
-    font-size: 11px; color: #6b7280; margin-top: 4px; font-family: var(--mono);
-  }
-
-  /* Upload */
+  .file-section h4 { font-size: 12px; font-weight: 700; color: #111; margin-bottom: 6px; }
+  .file-section p  { font-size: 11px; color: #6b7280; margin-top: 4px; font-family: var(--mono); }
   .upload-label {
     display: inline-flex; align-items: center; gap: 6px;
     background: var(--dark); color: #fff;
     padding: 5px 12px; border-radius: 5px;
     font-size: 11px; font-weight: 600; cursor: pointer;
-    transition: background .15s;
   }
   .upload-label:hover { background: #1f2937; }
   #file-upload { display: none; }
-  #upload-status {
-    display: inline-block; margin-left: 6px;
-    font-size: 11px; color: var(--pink); font-weight: 600;
-  }
-
-  /* Download */
+  #upload-status { display: inline-block; margin-left: 6px; font-size: 11px; color: var(--pink); font-weight: 600; }
   .dl-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
   .dl-row input[type="text"] {
     flex: 1; min-width: 100px; padding: 4px 8px;
@@ -206,22 +220,15 @@
     font-size: 12px; font-family: var(--mono); outline: none;
   }
   .dl-row input[type="text"]:focus { border-color: var(--pink); }
-
   .btn-sm {
     padding: 4px 12px; border: none; border-radius: 5px;
     font-size: 11px; font-weight: 700; cursor: pointer;
-    transition: background .15s;
   }
   .btn-sm.pink { background: var(--pink); color: #fff; }
   .btn-sm.pink:hover { background: var(--pink-dk); }
   .btn-sm.dark { background: var(--dark); color: #fff; }
   .btn-sm.dark:hover { background: #1f2937; }
-
-  #file-list {
-    margin-top: 6px; font-size: 11px;
-    font-family: var(--mono); color: #374151;
-    min-height: 16px;
-  }
+  #file-list { margin-top: 6px; font-size: 11px; font-family: var(--mono); color: #374151; min-height: 16px; }
 
   @media (max-width: 560px) {
     .editor-row { grid-template-columns: 1fr; }
@@ -233,7 +240,7 @@
 <body>
 <div class="widget">
 
-  <!-- ── Header ── -->
+  <!-- Header -->
   <div class="hdr">
     <div>
       <div class="hdr-course">Python Crash Course</div>
@@ -242,12 +249,12 @@
     <div class="status-pill loading" id="status-pill">Loading…</div>
   </div>
 
-  <!-- ── Task bar ── -->
+  <!-- Task bar -->
   <div class="task-bar" id="task-bar">
     <strong>Task:</strong> Ask for a name using <code>input()</code>, then print a greeting.
   </div>
 
-  <!-- ── Code + Output ── -->
+  <!-- Code + Terminal -->
   <div class="editor-row">
     <div>
       <div class="pane-label">Your code</div>
@@ -256,46 +263,43 @@ print("Hello " + name)</textarea>
     </div>
     <div>
       <div class="pane-label">Output</div>
-      <div id="output"><span class="sys">Run your code to see output…</span></div>
+      <div class="terminal-wrap" id="terminal-wrap">
+        <div class="term-bar">
+          <span class="tb-r"></span>
+          <span class="tb-y"></span>
+          <span class="tb-g"></span>
+        </div>
+        <div id="output"><span class="sys">Run your code to see output…</span></div>
+        <!-- Inline input line — appears here when input() is called -->
+        <div class="term-input-line" id="term-input-line">
+          <span id="term-prompt"></span>
+          <input type="text" id="term-field" autocomplete="off" spellcheck="false">
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- ── input() prompt UI ── -->
-  <div class="input-prompt" id="input-prompt">
-    <label id="input-label">Enter value:</label>
-    <div class="input-row">
-      <input type="text" id="input-field" placeholder="Type here and press Enter…">
-      <button class="btn btn-pink" id="input-submit">Submit</button>
-    </div>
-  </div>
-
-  <!-- ── Run / Check / Reset ── -->
+  <!-- Buttons -->
   <div class="controls">
     <button class="btn btn-pink" id="btn-run"   disabled>Run</button>
     <button class="btn btn-pink" id="btn-check" disabled>Check</button>
     <button class="btn btn-dark" id="btn-reset">Reset</button>
   </div>
 
-  <!-- ── Feedback ── -->
+  <!-- Feedback -->
   <div class="feedback" id="feedback"></div>
 
-  <!-- ── Optional text file tools ── -->
+  <!-- File tools -->
   <details class="extra">
     <summary>Optional text file tools</summary>
     <div class="extra-body">
-
-      <!-- Upload -->
       <div class="file-section">
         <h4>Upload a text file for Python to read</h4>
-        <label class="upload-label" for="file-upload">
-          📂 Choose File
-        </label>
+        <label class="upload-label" for="file-upload">📂 Choose File</label>
         <span id="upload-status">No file chosen</span>
         <input type="file" id="file-upload" accept=".txt,.csv,.dat,.json">
         <p>After upload, Python can read it using<br><code>open("filename.txt")</code></p>
       </div>
-
-      <!-- Download -->
       <div class="file-section">
         <h4>Download a file created by Python</h4>
         <div class="dl-row">
@@ -306,11 +310,10 @@ print("Hello " + name)</textarea>
         <div id="file-list"></div>
         <p>Example: <code>open("output.txt","w").write("Hello")</code></p>
       </div>
-
     </div>
   </details>
 
-</div><!-- /.widget -->
+</div>
 
 <script src="https://cdn.jsdelivr.net/pyodide/v0.27.5/full/pyodide.js"></script>
 <script>
@@ -322,7 +325,7 @@ const LESSON = {
   task:    `<strong>Task:</strong> Ask for a name using <code>input()</code>, then print a greeting.`,
   starter: `name = input("Enter your name: ")\nprint("Hello " + name)`,
   check(outputLines) {
-    const out = outputLines.join("\n").toLowerCase();
+    const out = outputLines.join("").toLowerCase();
     if (out.includes("hello"))
       return { ok: true,  msg: "✓ Great — you printed a greeting!" };
     return { ok: false, msg: "✗ Output doesn't contain a greeting yet. Make sure you print 'Hello' followed by the name." };
@@ -330,39 +333,38 @@ const LESSON = {
 };
 // ═══════════════════════════════════════════════════════════════
 
-// ── DOM refs ──────────────────────────────────────────────────
-const pill        = document.getElementById('status-pill');
-const editor      = document.getElementById('code-editor');
-const outputEl    = document.getElementById('output');
-const feedbackEl  = document.getElementById('feedback');
-const inputPrompt = document.getElementById('input-prompt');
-const inputLabel  = document.getElementById('input-label');
-const inputField  = document.getElementById('input-field');
-const btnRun      = document.getElementById('btn-run');
-const btnCheck    = document.getElementById('btn-check');
-const btnReset    = document.getElementById('btn-reset');
-const fileUpload  = document.getElementById('file-upload');
-const uploadStatus= document.getElementById('upload-status');
-const dlFilename  = document.getElementById('dl-filename');
-const btnDownload = document.getElementById('btn-download');
-const btnListFiles= document.getElementById('btn-listfiles');
-const fileListEl  = document.getElementById('file-list');
+// ── DOM ──────────────────────────────────────────────────────
+const pill         = document.getElementById('status-pill');
+const editor       = document.getElementById('code-editor');
+const outputEl     = document.getElementById('output');
+const feedbackEl   = document.getElementById('feedback');
+const termInputLine= document.getElementById('term-input-line');
+const termPromptEl = document.getElementById('term-prompt');
+const termField    = document.getElementById('term-field');
+const btnRun       = document.getElementById('btn-run');
+const btnCheck     = document.getElementById('btn-check');
+const btnReset     = document.getElementById('btn-reset');
+const fileUpload   = document.getElementById('file-upload');
+const uploadStatus = document.getElementById('upload-status');
+const dlFilename   = document.getElementById('dl-filename');
+const btnDownload  = document.getElementById('btn-download');
+const btnListFiles = document.getElementById('btn-listfiles');
+const fileListEl   = document.getElementById('file-list');
 
-// Apply config
+// Apply lesson config
 document.getElementById('lesson-title').textContent = LESSON.title;
 document.getElementById('task-bar').innerHTML       = LESSON.task;
 editor.value = LESSON.starter;
 
 // ── State ─────────────────────────────────────────────────────
-let pyodide      = null;
-let capturedOut  = [];    // text chunks printed to stdout
-let inputQueue   = [];    // pending {prompt, resolve} from input()
+let pyodide     = null;
+let capturedOut = [];
+let inputQueue  = [];
 
 // ── Pyodide init ──────────────────────────────────────────────
 async function initPyodide() {
   try {
     pyodide = await loadPyodide();
-    // Create /work dir for user files
     pyodide.FS.mkdir('/work');
     pyodide.FS.chdir('/work');
     pill.textContent = 'Python ready';
@@ -372,75 +374,84 @@ async function initPyodide() {
   } catch(e) {
     pill.textContent = 'Load failed';
     pill.className   = 'status-pill error';
-    appendOut('⚠ Could not load Pyodide. Check your internet connection.\n', 'err');
+    termPrint('⚠ Could not load Pyodide. Check your internet connection.\n', 'err');
   }
 }
 
-// ── Output helpers ────────────────────────────────────────────
-function clearOutput() {
+// ── Terminal output ───────────────────────────────────────────
+function termClear() {
   outputEl.innerHTML = '';
   capturedOut = [];
 }
-function appendOut(text, cls) {
-  const s = document.createElement('span');
-  if (cls) s.className = cls;
-  s.textContent = text;
-  outputEl.appendChild(s);
+
+function termPrint(text, cls) {
+  // Split by newline to insert <br>-style line breaks as separate spans
+  const span = document.createElement('span');
+  if (cls) span.className = cls;
+  span.textContent = text;
+  outputEl.appendChild(span);
   outputEl.scrollTop = outputEl.scrollHeight;
-  capturedOut.push(text);
+  if (!cls || cls === 'inp') capturedOut.push(text);
 }
 
-// ── input() bridge ────────────────────────────────────────────
-// Called from Python via Pyodide's JS bridge.
-// Returns a JS Promise that resolves when the student submits.
+// Clicking the terminal area focuses the input field if active
+document.getElementById('terminal-wrap').addEventListener('click', () => {
+  if (termInputLine.classList.contains('active')) termField.focus();
+});
+
+// ── input() terminal bridge ───────────────────────────────────
+// When Python calls input(prompt):
+//   1. Print the prompt text inline in the terminal
+//   2. Show the invisible input field right after it
+//   3. When Enter is pressed, echo the typed value and resolve the promise
 function jsInput(promptText) {
   const p = String(promptText ?? '');
   return new Promise(resolve => {
-    inputQueue.push({ prompt: p, resolve });
-    showInputPrompt(p);
+    inputQueue.push({ resolve });
+    // Print prompt into output (no newline yet — user types on same line)
+    termPrint(p);
+    // Show the inline input field
+    termPromptEl.textContent = '';  // prompt already printed above
+    termField.value = '';
+    termInputLine.classList.add('active');
+    termField.focus();
+    outputEl.scrollTop = outputEl.scrollHeight;
   });
 }
-window.jsInput = jsInput;   // exposed to Python
+window._py_print = (s) => { if (s) termPrint(String(s)); };
+window._py_input = (p)  => jsInput(String(p ?? ''));
 
-function showInputPrompt(p) {
-  inputLabel.textContent = p || 'Enter value:';
-  inputField.value = '';
-  inputPrompt.classList.add('visible');
-  inputField.focus();
-}
-
-function submitInput() {
+function submitTermInput() {
   if (!inputQueue.length) return;
-  const { prompt, resolve } = inputQueue.shift();
-  const val = inputField.value;
-  // Echo prompt + value to output (mimics terminal behaviour)
-  appendOut(prompt + val + '\n');
-  inputPrompt.classList.remove('visible');
-  inputField.value = '';
+  const { resolve } = inputQueue.shift();
+  const val = termField.value;
+  // Echo what the user typed (styled differently so it's clear)
+  termPrint(val + '\n', 'inp');
+  termInputLine.classList.remove('active');
+  termField.value = '';
   resolve(val);
-  if (inputQueue.length) showInputPrompt(inputQueue[0].prompt);
+  // If more inputs queued, show next
+  if (inputQueue.length) {
+    // This shouldn't normally happen but handle gracefully
+  }
 }
 
-document.getElementById('input-submit').addEventListener('click', submitInput);
-inputField.addEventListener('keydown', e => { if (e.key === 'Enter') submitInput(); });
+termField.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); submitTermInput(); }
+});
 
 // ── Run ───────────────────────────────────────────────────────
-// Expose bridge functions on window so Python's `js` module can see them
-window._py_print = function(s) { if (s) appendOut(String(s)); };
-window._py_input = function(promptText) { return jsInput(String(promptText ?? '')); };
-
 async function runCode() {
   if (!pyodide) return;
-  clearOutput();
+  termClear();
   hideFeedback();
   inputQueue = [];
-  inputPrompt.classList.remove('visible');
+  termInputLine.classList.remove('active');
   setBusy(true);
 
   try {
-    // Set up stdout/stderr redirect via window global
     pyodide.runPython(`
-import sys, builtins
+import sys
 from js import _py_print
 
 class _Out:
@@ -452,16 +463,10 @@ sys.stdout = _Out()
 sys.stderr = _Out()
 `);
 
-    // Store the JS input function in Python globals so Python can call it
     pyodide.globals.set('_js_input_fn', (prompt) => jsInput(String(prompt ?? '')));
 
-    // Transform user code: wrap in async def and replace input(...) with
-    // await _async_input(...) so Pyodide's event loop can resolve the JS Promise
-    const userCode = editor.value;
-
-    // Replace  input(  →  await _async_input(  in the user's source
-    const transformed = userCode.replace(/\binput\s*\(/g, 'await _async_input(');
-    const indented = transformed.split('\n').map(l => '    ' + l).join('\n');
+    const transformed = editor.value.replace(/\binput\s*\(/g, 'await _async_input(');
+    const indented    = transformed.split('\n').map(l => '    ' + l).join('\n');
 
     await pyodide.runPythonAsync(
 `async def _async_input(prompt=''):
@@ -474,14 +479,12 @@ await _main()`
     );
 
   } catch(err) {
-    // Tidy up the traceback – strip internal pyodide frame noise
     let msg = String(err);
-    // Keep only lines from the SyntaxError / runtime error onwards
     const cut = msg.indexOf('Error:');
     if (cut !== -1) msg = msg.slice(cut);
-    appendOut(msg + '\n', 'err');
+    termPrint('\n' + msg + '\n', 'err');
   } finally {
-    inputPrompt.classList.remove('visible');
+    termInputLine.classList.remove('active');
     inputQueue = [];
     setBusy(false);
   }
@@ -498,9 +501,9 @@ function hideFeedback() { feedbackEl.className = 'feedback'; }
 // ── Reset ─────────────────────────────────────────────────────
 function resetCode() {
   editor.value = LESSON.starter;
-  clearOutput();
+  termClear();
   hideFeedback();
-  inputPrompt.classList.remove('visible');
+  termInputLine.classList.remove('active');
   uploadStatus.textContent = 'No file chosen';
   fileListEl.textContent   = '';
   outputEl.innerHTML = '<span class="sys">Run your code to see output…</span>';
@@ -511,58 +514,44 @@ function setBusy(busy) {
   btnRun.disabled   = busy;
   btnCheck.disabled = busy;
   pill.textContent  = busy ? 'Running…' : 'Python ready';
-  if (busy) pill.className = 'status-pill loading';
-  else      pill.className = 'status-pill';
+  pill.className    = busy ? 'status-pill loading' : 'status-pill';
 }
 
-// ── File upload → Pyodide FS ──────────────────────────────────
+// ── File upload ───────────────────────────────────────────────
 fileUpload.addEventListener('change', async () => {
   const file = fileUpload.files[0];
   if (!file || !pyodide) return;
-  const buf  = await file.arrayBuffer();
-  const data = new Uint8Array(buf);
+  const data = new Uint8Array(await file.arrayBuffer());
   const path = '/work/' + file.name;
   try { pyodide.FS.unlink(path); } catch(_) {}
   pyodide.FS.writeFile(path, data);
   uploadStatus.textContent = '✓ ' + file.name;
-  appendOut(`[File uploaded: ${file.name} (${data.length} bytes) — readable as open("${file.name}")]\n`, 'sys');
+  termPrint(`[Uploaded: ${file.name} — use open("${file.name}") to read it]\n`, 'sys');
 });
 
-// ── Download from Pyodide FS ──────────────────────────────────
+// ── File download ─────────────────────────────────────────────
 function downloadFile() {
   if (!pyodide) return;
   const name = dlFilename.value.trim() || 'output.txt';
-  const path = '/work/' + name;
   let data;
-  try {
-    data = pyodide.FS.readFile(path);
-  } catch(_) {
-    fileListEl.textContent = `✗ File not found: ${name}`;
-    return;
-  }
-  const blob = new Blob([data]);
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = name; a.click();
+  try { data = pyodide.FS.readFile('/work/' + name); }
+  catch(_) { fileListEl.textContent = `✗ File not found: ${name}`; return; }
+  const url = URL.createObjectURL(new Blob([data]));
+  Object.assign(document.createElement('a'), { href: url, download: name }).click();
   URL.revokeObjectURL(url);
   fileListEl.textContent = `✓ Downloaded: ${name}`;
 }
 
-// ── List files in /work ───────────────────────────────────────
+// ── List files ────────────────────────────────────────────────
 function listFiles() {
   if (!pyodide) return;
   try {
-    const entries = pyodide.FS.readdir('/work')
-      .filter(f => f !== '.' && f !== '..');
-    fileListEl.textContent = entries.length
-      ? 'Files: ' + entries.join(', ')
-      : '(no files yet)';
-  } catch(_) {
-    fileListEl.textContent = '(no files yet)';
-  }
+    const files = pyodide.FS.readdir('/work').filter(f => f !== '.' && f !== '..');
+    fileListEl.textContent = files.length ? 'Files: ' + files.join(', ') : '(no files yet)';
+  } catch(_) { fileListEl.textContent = '(no files yet)'; }
 }
 
-// ── Tab key in editor ─────────────────────────────────────────
+// ── Tab key ───────────────────────────────────────────────────
 editor.addEventListener('keydown', e => {
   if (e.key === 'Tab') {
     e.preventDefault();
@@ -572,7 +561,7 @@ editor.addEventListener('keydown', e => {
   }
 });
 
-// ── Wire up buttons ───────────────────────────────────────────
+// ── Wire buttons ──────────────────────────────────────────────
 btnRun.addEventListener('click',       runCode);
 btnCheck.addEventListener('click',     checkCode);
 btnReset.addEventListener('click',     resetCode);
